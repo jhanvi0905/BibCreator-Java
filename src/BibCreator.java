@@ -28,8 +28,9 @@ public class BibCreator {
         pwNJ.println(articleToWrite.trim());
         pwNJ.println();
     }
-    public static void processFilesForValidation(Scanner sc, int articleNumber, PrintWriter pw1, PrintWriter pw2, PrintWriter pw3) throws FileInvalidException {
+    public static void processFilesForValidation(Scanner sc, int articleNumber, PrintWriter pw1, PrintWriter pw2, PrintWriter pw3)  {
         String article;
+        String deletePath = "IEEE"+articleNumber+".json";
         String emptyBracket = "{}";
         String[] articleFields = new String[11];
         try {
@@ -127,6 +128,15 @@ public class BibCreator {
         } catch (FileInvalidException e) {
             System.out.println("Problem detected with input file: Latex"+articleNumber+".bib");
             System.out.println(e.getMessage()+"\n");
+            pw1.close();
+            pw2.close();
+            pw3.close();
+            File f1 = new File(new File("Comp6481_F21_Assg2_Files/IEEE" + articleNumber + ".json").getAbsolutePath().replace("\\", "\\\\"));
+            File f2 = new File(new File("Comp6481_F21_Assg2_Files/ACM" + articleNumber + ".json").getAbsolutePath().replace("\\", "\\\\"));
+            File f3 = new File(new File("Comp6481_F21_Assg2_Files/NJ" + articleNumber + ".json").getAbsolutePath().replace("\\", "\\\\"));
+            f1.delete();
+            f2.delete();
+            f3.delete();
         } finally {
             pw1.close();
             pw2.close();
@@ -151,19 +161,6 @@ public class BibCreator {
         PrintWriter pwNJ = null;
         String filename;
         BufferedReader br = null;
-//        try {
-//            openFiles();
-//        } catch (FileInvalidException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        try {
-//            outputFiles();
-//        } catch (FileInvalidException e) {
-//            File dir = new File("Comp6481_F21_Assg2_Files");
-//            for(File file: dir.listFiles())
-//                if (!file.isDirectory())
-//                    file.delete();
-//        }
         System.out.println("Welcome to Bib Creator!\n");
         for (int i = 1; i <= 11; i++) {
             filename = "Comp6481_F21_Assg2_Files//Latex" + (i) + ".bib";
@@ -176,8 +173,6 @@ public class BibCreator {
                 sc.close();
             } catch (FileNotFoundException e) {
                 System.out.println("Could not open input file Latex"+i+ ".bib for reading. \nPlease check if file exists! Program will terminate after closing any opened files.");
-            }catch (FileInvalidException e1){
-                System.out.println("Problem detected with input file: Latex"+i+".bib");
             }
         }
 
@@ -202,5 +197,4 @@ public class BibCreator {
             }
         }
     }
-
 }
